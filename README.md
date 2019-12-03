@@ -19,3 +19,4 @@ mvn spring-boot:run
 - https://dzone.com/articles/hello-world-program-spring-boot
 - https://developer.okta.com/blog/2017/10/31/add-authentication-to-play-framework-with-oidc
 - https://connect2id.com/learn/openid-connect
+- https://www.mathieupassenaud.fr/oauth-backend
