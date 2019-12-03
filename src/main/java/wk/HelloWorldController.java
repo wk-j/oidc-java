@@ -26,8 +26,6 @@ public class HelloWorldController {
     @RequestMapping("/hello")
     @ResponseBody
     public String sayHello(HttpServletRequest req, HttpServletResponse res) {
-        System.out.println(context.getContextPath());
-
         Redirect(req, res);
         return "Hello World Developer!!!";
     }
@@ -35,25 +33,36 @@ public class HelloWorldController {
     @RequestMapping("/go")
     @ResponseBody
     public String go(HttpServletRequest req, HttpServletResponse res) {
-        System.out.println(context.getContextPath());
-        return "Go go go";
+        OidcClient client = build();
+
+        String code = req.getParameter("code");
+        System.out.println("code::" + code);
+
+        String state = req.getParameter("state");
+        System.out.println("state::" + state);
+
+        return "Go";
     }
 
-    public void Redirect(HttpServletRequest req, HttpServletResponse res) {
+    OidcClient build() {
         String clientId = "hello";
         String secret = "0f60c296-ff26-4eef-8890-b698c6a5d982";
         String discoveryUri = "http://localhost:8080/auth/realms/master/.well-known/openid-configuration";
-
         OidcConfiguration config = new OidcConfiguration();
+
         config.setClientId(clientId);
         config.setSecret(secret);
         config.setDiscoveryURI(discoveryUri);
-
-        J2EContext j2e = new J2EContext(req, res);
+        config.setResponseType("code");
 
         OidcClient client = new OidcClient(config);
         client.setCallbackUrl("http://localhost:8083/go");
+        return client;
+    }
 
+    public void Redirect(HttpServletRequest req, HttpServletResponse res) {
+        J2EContext j2e = new J2EContext(req, res);
+        OidcClient client = build();
         HttpAction action = client.redirect(j2e);
     }
 }

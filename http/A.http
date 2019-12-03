@@ -1,0 +1,36 @@
+GET http://localhost:8083/go?client_name=OidcClient&state=S9rxO3NSjwwHdJQCCWOtQkMPrdJekKzQglgaZSSMQUM&session_state=26692855-de34-4c24-96dc-4d617eb391e1&code=b3a43c80-b5ac-48be-b03b-e22c28ba60d0.26692855-de34-4c24-96dc-4d617eb391e1.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767
+http://localhost:8083/go?client_name=OidcClient&state=ywDODGnjMtCsPAZiqMoK19uf9Q_YzC-LLSAFk0ca1w0&session_state=26692855-de34-4c24-96dc-4d617eb391e1&code=a123b5d9-0324-49a8-bf05-f2fcb75777dd.26692855-de34-4c24-96dc-4d617eb391e1.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767
+
+###
+
+GET http://localhost:8080/auth/realms/master/.well-known/openid-configuration
+
+
+###
+POST http://localhost:8080/auth/realms/master/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=authorization_code
+&code=ab012b26-07be-4523-9ed0-ae50d61a1710.be09a300-3ed6-4548-a889-dabdbc488f6d.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767
+&client_id=hello
+&client_secret=0f60c296-ff26-4eef-8890-b698c6a5d982
+###
+
+curl -X POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token'
+    -H 'Content-Type: application/x-www-form-urlencoded'
+    -d 'grant_type=authorization_code'
+    -d 'client_id=hello'
+    -d 'client_secret=0f60c296-ff26-4eef-8890-b698c6a5d982'
+    -d 'redirect_url=http://localhost:8083/go'
+    -d 'code=00d6a359-6bad-4f03-85a7-0094fccca3d8.be09a300-3ed6-4548-a889-dabdbc488f6d.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767'
+
+###
+
+curl -X POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/token'
+    -H 'content-type: application/x-www-form-urlencoded'
+    -d 'grant_type=password'
+    -d 'client_id=hello'
+    -d 'client_secret=0f60c296-ff26-4eef-8890-b698c6a5d982'
+    -d 'username=admin'
+    -d 'password=admin'
