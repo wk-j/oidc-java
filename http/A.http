@@ -22,8 +22,7 @@ curl -X POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/t
     -d 'grant_type=authorization_code'
     -d 'client_id=hello'
     -d 'client_secret=0f60c296-ff26-4eef-8890-b698c6a5d982'
-    -d 'redirect_url=http://localhost:8083/go'
-    -d 'code=00d6a359-6bad-4f03-85a7-0094fccca3d8.be09a300-3ed6-4548-a889-dabdbc488f6d.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767'
+    -d 'code=032d8452-ce0c-4a54-8f95-ae6c02f3afb0.d88d76ca-8368-4af8-ada1-049781925b00.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767'
 
 ###
 

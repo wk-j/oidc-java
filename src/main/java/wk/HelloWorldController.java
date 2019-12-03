@@ -36,7 +36,8 @@ public class HelloWorldController {
         OidcClient client = build();
 
         String code = req.getParameter("code");
-        System.out.println("code::" + code);
+        String codeF = String.format("-d 'code=%s'", code);
+        System.out.println(codeF);
 
         String state = req.getParameter("state");
         System.out.println("state::" + state);
