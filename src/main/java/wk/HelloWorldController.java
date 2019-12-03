@@ -52,7 +52,7 @@ public class HelloWorldController {
         J2EContext j2e = new J2EContext(req, res);
 
         OidcClient client = new OidcClient(config);
-        client.setCallbackUrl("http://localhost:8080/go");
+        client.setCallbackUrl("http://localhost:8083/go");
 
         HttpAction action = client.redirect(j2e);
     }
