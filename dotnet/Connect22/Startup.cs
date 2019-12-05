@@ -57,9 +57,17 @@ namespace Connect22 {
                     }
 
                     options.Events = new OpenIdConnectEvents {
+                        OnRedirectToIdentityProvider = async x => {
+                            _logger.LogInformation("-- OnRedirectToIdentityProvider --");
+                            foreach (var item in x.Request.Query) {
+                                _logger.LogInformation("{0} - {1}", item.Key, item.Value);
+                            }
+                            Show(x.Request);
+                        },
+
                         OnMessageReceived = async x => {
                             _logger.LogInformation("-- OnMessageReceived --");
-                            Show(x.Request);
+                            // Show(x.Request);
                             await Task.CompletedTask;
                         },
                         OnTicketReceived = async x => {
@@ -68,19 +76,19 @@ namespace Connect22 {
 
                             // String jwtTokenString = x.Request.Form["id_token"];
                             // _logger.LogInformation(jwtTokenString);
-                            Show(x.Request);
+                            // Show(x.Request);
 
                             await Task.CompletedTask;
                         },
                         OnUserInformationReceived = async x => {
                             _logger.LogInformation("-- OnUserInformationReceived --");
-                            Show(x.Request);
+                            // Show(x.Request);
                             await Task.CompletedTask;
 
                         },
                         OnAuthorizationCodeReceived = async x => {
                             _logger.LogInformation("-- OnAuthorizationCodeReceived --");
-                            Show(x.Request);
+                            // Show(x.Request);
                             await Task.CompletedTask;
                         }
                     };

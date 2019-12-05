@@ -20,6 +20,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.pac4j.core.context.J2EContext;
 import org.pac4j.oidc.client.OidcClient;
+import org.pac4j.oidc.config.KeycloakOidcConfiguration;
 import org.pac4j.oidc.config.OidcConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -59,6 +60,30 @@ public class HelloWorldController {
         J2EContext j2e = new J2EContext(req, res);
 
         client.setCallbackUrl("http://localhost:8083/token");
+        client.redirect(j2e);
+    }
+
+    @RequestMapping("/login2")
+    @ResponseBody
+    public void login2(HttpServletRequest req, HttpServletResponse res) {
+
+        // String discoveryUri =
+        // "http://localhost:8080/auth/realms/master/.well-known/openid-configuration";
+        // OidcConfiguration config = new OidcConfiguration();
+        // config.setDiscoveryURI(discoveryUri);
+
+        KeycloakOidcConfiguration config = new KeycloakOidcConfiguration();
+
+        config.setClientId(clientId);
+        config.setSecret(clientSecret);
+        config.setBaseUri("http://localhost:8080/auth");
+        config.setRealm("master");
+        config.setResponseType("code");
+
+        OidcClient client = new OidcClient(config);
+        J2EContext j2e = new J2EContext(req, res);
+
+        client.setCallbackUrl("/token");
         client.redirect(j2e);
     }
 
