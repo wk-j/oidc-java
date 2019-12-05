@@ -8,7 +8,7 @@
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            // "preLaunchTask": "build",
+            "preLaunchTask": "build",
             "program": "${workspaceFolder}/dotnet/Connect22/bin/Debug/netcoreapp2.2/Connect22.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
