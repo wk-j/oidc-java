@@ -19,9 +19,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.pac4j.core.context.J2EContext;
-import org.pac4j.core.context.WebContext;
-import org.pac4j.core.exception.HttpAction;
-import org.pac4j.core.redirect.RedirectAction;
 import org.pac4j.oidc.client.OidcClient;
 import org.pac4j.oidc.config.OidcConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,37 +45,8 @@ public class HelloWorldController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public String login(HttpServletRequest req, HttpServletResponse res) {
-        Redirect(req, res);
-        return "Hello World Developer!!!";
-    }
+    public void login(HttpServletRequest req, HttpServletResponse res) {
 
-    @RequestMapping("/token")
-    @ResponseBody
-    public String go(HttpServletRequest req, HttpServletResponse res) throws ClientProtocolException, IOException {
-        String code = req.getParameter("code");
-        String tokenUrl = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpPost httpPost = new HttpPost(tokenUrl);
-
-        List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
-        parameters.add(new BasicNameValuePair("code", code));
-        parameters.add(new BasicNameValuePair("client_id", clientId));
-        parameters.add(new BasicNameValuePair("client_secret", clientSecret));
-        // parameters.add(new BasicNameValuePair("redirect_uri",
-        // "http://localhost:8083/token"));
-        // parameters.add(new BasicNameValuePair("response_type", "code id_token
-        // token"));
-        httpPost.setEntity(new UrlEncodedFormEntity(parameters));
-
-        HttpResponse response = httpClient.execute(httpPost);
-        String responseBody = EntityUtils.toString(response.getEntity());
-        System.out.println(responseBody);
-        return "Go";
-    }
-
-    OidcClient build() {
         String discoveryUri = "http://localhost:8080/auth/realms/master/.well-known/openid-configuration";
         OidcConfiguration config = new OidcConfiguration();
 
@@ -88,13 +56,34 @@ public class HelloWorldController {
         config.setResponseType("code");
 
         OidcClient client = new OidcClient(config);
+        J2EContext j2e = new J2EContext(req, res);
+
         client.setCallbackUrl("http://localhost:8083/token");
-        return client;
+        client.redirect(j2e);
     }
 
-    public void Redirect(HttpServletRequest req, HttpServletResponse res) {
-        J2EContext j2e = new J2EContext(req, res);
-        OidcClient client = build();
-        HttpAction action = client.redirect(j2e);
+    @RequestMapping("/token")
+    @ResponseBody
+    public String token(HttpServletRequest req, HttpServletResponse res) throws ClientProtocolException, IOException {
+        String code = req.getParameter("code");
+        // String state = req.getParameter("state");
+        String tokenUrl = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
+
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost httpPost = new HttpPost(tokenUrl);
+
+        List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+        parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
+        parameters.add(new BasicNameValuePair("code", code));
+        // parameters.add(new BasicNameValuePair("state", state));
+        parameters.add(new BasicNameValuePair("client_id", clientId));
+        parameters.add(new BasicNameValuePair("client_secret", clientSecret));
+        parameters.add(new BasicNameValuePair("redirect_uri", "http://localhost:8083/token"));
+
+        httpPost.setEntity(new UrlEncodedFormEntity(parameters));
+
+        HttpResponse response = httpClient.execute(httpPost);
+        String responseBody = EntityUtils.toString(response.getEntity());
+        return responseBody;
     }
 }
