@@ -21,8 +21,10 @@ curl -X POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/t
     -H 'Content-Type: application/x-www-form-urlencoded'
     -d 'grant_type=authorization_code'
     -d 'client_id=hello'
-    -d 'client_secret=0f60c296-ff26-4eef-8890-b698c6a5d982'
-    -d 'code=032d8452-ce0c-4a54-8f95-ae6c02f3afb0.d88d76ca-8368-4af8-ada1-049781925b00.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767'
+    -d 'client_secret=830c9965-2990-4c22-8adc-6af4343b9040'
+    # -d 'code=032d8452-ce0c-4a54-8f95-ae6c02f3afb0.d88d76ca-8368-4af8-ada1-049781925b00.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767'
+    -d 'code=1a39e957-970d-44b6-8ec4-bac7cef08bc4.d327edb0-64fb-416b-8a81-22e7246c7691.c4b85c53-ec9f-4adc-8d16-714908f7a610'
+
 
 ###
 
@@ -33,3 +35,9 @@ curl -X POST 'http://localhost:8080/auth/realms/master/protocol/openid-connect/t
     -d 'client_secret=0f60c296-ff26-4eef-8890-b698c6a5d982'
     -d 'username=admin'
     -d 'password=admin'
+
+
+###
+
+curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=authorization_code&code=1a39e957-970d-44b6-8ec4-bac7cef08bc4.d327edb0-64fb-416b-8a81-22e7246c7691.c4b85c53-ec9f-4adc-8d16-714908f7a610&redirect_uri=http://example.com/oauth&client_id=hello&client_secret=830c9965-2990-4c22-8adc-6af4343b9040"
+    http://localhost:8080/auth/realms/master/protocol/openid-connect/token'
