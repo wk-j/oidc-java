@@ -2,7 +2,10 @@ package wk;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -55,6 +58,7 @@ public class HelloWorldController {
         config.setSecret(clientSecret);
         config.setDiscoveryURI(discoveryUri);
         config.setResponseType("code");
+        // config.setResponseType("code id_token token");
 
         OidcClient client = new OidcClient(config);
         J2EContext j2e = new J2EContext(req, res);
@@ -63,41 +67,64 @@ public class HelloWorldController {
         client.redirect(j2e);
     }
 
-    @RequestMapping("/login2")
-    @ResponseBody
-    public void login2(HttpServletRequest req, HttpServletResponse res) {
+    // @RequestMapping("/login2")
+    // @ResponseBody
+    // public void login2(HttpServletRequest req, HttpServletResponse res) throws
+    // UnsupportedEncodingException {
 
-        KeycloakOidcConfiguration config = new KeycloakOidcConfiguration();
+    // String cb = "http://localhost:8083/token";
+    // // String url = URLEncoder.encode(cb, "UTF-8");
+    // // System.out.println("url = " + url);
 
-        config.setClientId(clientId);
-        config.setSecret(clientSecret);
-        config.setBaseUri("http://localhost:8080/auth");
-        config.setRealm("master");
-        config.setResponseType("code");
+    // KeycloakOidcConfiguration config = new KeycloakOidcConfiguration();
 
-        OidcClient client = new OidcClient(config);
-        J2EContext j2e = new J2EContext(req, res);
+    // config.setClientId(clientId);
+    // config.setSecret(clientSecret);
+    // config.setBaseUri("http://localhost:8080/auth");
+    // config.setRealm("master");
+    // // config.setResponseType("code id_token token");
+    // config.setResponseType("code");
+    // config.setUseNonce(true);
 
-        client.setCallbackUrl("/token");
-        client.redirect(j2e);
-    }
+    // OidcClient client = new OidcClient(config);
+
+    // J2EContext j2e = new J2EContext(req, res);
+
+    // client.setCallbackUrl(cb);
+    // client.redirect(j2e);
+    // }
 
     @RequestMapping("/token")
     @ResponseBody
     public String token(HttpServletRequest req, HttpServletResponse res) throws ClientProtocolException, IOException {
+
+        Enumeration<String> names = req.getParameterNames();
+        ArrayList<String> list = Collections.list(names);
+        for (String key : list) {
+            String value = req.getParameter(key);
+            String fmt = String.format("> %s=%s", key, value);
+            System.out.println(fmt);
+        }
+
         String code = req.getParameter("code");
-        // String state = req.getParameter("state");
+        String state = req.getParameter("state");
+
         String tokenUrl = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost httpPost = new HttpPost(tokenUrl);
+
+        String cb = "http://localhost:8083/token";
+        // String url = URLEncoder.encode(cb, "UTF-8");
+        // System.out.println("url = " + url);
 
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
         parameters.add(new BasicNameValuePair("code", code));
         parameters.add(new BasicNameValuePair("client_id", clientId));
         parameters.add(new BasicNameValuePair("client_secret", clientSecret));
-        parameters.add(new BasicNameValuePair("redirect_uri", "http://localhost:8083/token"));
+        parameters.add(new BasicNameValuePair("redirect_uri", cb));
+        // parameters.add(new BasicNameValuePair("state", state));
 
         httpPost.setEntity(new UrlEncodedFormEntity(parameters));
 
