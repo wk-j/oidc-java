@@ -47,9 +47,22 @@ public class HelloWorldController {
         return "ok";
     }
 
+    public void show(HttpServletRequest req) {
+        Enumeration<String> names = req.getParameterNames();
+        ArrayList<String> list = Collections.list(names);
+        for (String key : list) {
+            String value = req.getParameter(key);
+            String fmt = String.format("> %s=%s", key, value);
+            System.out.println(fmt);
+        }
+
+    }
+
     @RequestMapping("/login")
     @ResponseBody
     public void login(HttpServletRequest req, HttpServletResponse res) {
+
+        show(req);
 
         String discoveryUri = "http://localhost:8080/auth/realms/master/.well-known/openid-configuration";
         OidcConfiguration config = new OidcConfiguration();
@@ -58,7 +71,7 @@ public class HelloWorldController {
         config.setSecret(clientSecret);
         config.setDiscoveryURI(discoveryUri);
         config.setResponseType("code");
-        // config.setResponseType("code id_token token");
+        config.setUseNonce(true);
 
         OidcClient client = new OidcClient(config);
         J2EContext j2e = new J2EContext(req, res);
@@ -98,25 +111,17 @@ public class HelloWorldController {
     @ResponseBody
     public String token(HttpServletRequest req, HttpServletResponse res) throws ClientProtocolException, IOException {
 
-        Enumeration<String> names = req.getParameterNames();
-        ArrayList<String> list = Collections.list(names);
-        for (String key : list) {
-            String value = req.getParameter(key);
-            String fmt = String.format("> %s=%s", key, value);
-            System.out.println(fmt);
-        }
+        show(req);
 
         String code = req.getParameter("code");
         String state = req.getParameter("state");
+        String cb = "http://localhost:8083/token";
+        String url = URLEncoder.encode(cb, "UTF-8");
 
         String tokenUrl = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost httpPost = new HttpPost(tokenUrl);
-
-        String cb = "http://localhost:8083/token";
-        // String url = URLEncoder.encode(cb, "UTF-8");
-        // System.out.println("url = " + url);
 
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
