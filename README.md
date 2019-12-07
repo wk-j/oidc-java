@@ -3,6 +3,7 @@
 ```bash
 docker-compose up
 open http://localhost:8080/auth
+open http://localhost:8080/auth/realms/master/.well-known/openid-configuration
 ```
 
 ## Java

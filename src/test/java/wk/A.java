@@ -35,7 +35,6 @@ public class A {
         parameters.add(new BasicNameValuePair("client_id", clientId));
         parameters.add(new BasicNameValuePair("client_secret", clientSecret));
         parameters.add(new BasicNameValuePair("redirect_uri", "http://google.com"));
-        parameters.add(new BasicNameValuePair("response_type", "code id_token token"));
         httpPost.setEntity(new UrlEncodedFormEntity(parameters));
 
         HttpResponse response = httpClient.execute(httpPost);

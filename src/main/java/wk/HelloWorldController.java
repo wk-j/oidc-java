@@ -67,11 +67,6 @@ public class HelloWorldController {
     @ResponseBody
     public void login2(HttpServletRequest req, HttpServletResponse res) {
 
-        // String discoveryUri =
-        // "http://localhost:8080/auth/realms/master/.well-known/openid-configuration";
-        // OidcConfiguration config = new OidcConfiguration();
-        // config.setDiscoveryURI(discoveryUri);
-
         KeycloakOidcConfiguration config = new KeycloakOidcConfiguration();
 
         config.setClientId(clientId);
@@ -100,7 +95,6 @@ public class HelloWorldController {
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
         parameters.add(new BasicNameValuePair("code", code));
-        // parameters.add(new BasicNameValuePair("state", state));
         parameters.add(new BasicNameValuePair("client_id", clientId));
         parameters.add(new BasicNameValuePair("client_secret", clientSecret));
         parameters.add(new BasicNameValuePair("redirect_uri", "http://localhost:8083/token"));
