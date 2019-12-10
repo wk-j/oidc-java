@@ -22,6 +22,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.pac4j.core.context.J2EContext;
+import org.pac4j.core.http.callback.CallbackUrlResolver;
+import org.pac4j.core.http.callback.NoParameterCallbackUrlResolver;
+import org.pac4j.core.http.callback.PathParameterCallbackUrlResolver;
+import org.pac4j.oidc.client.KeycloakOidcClient;
 import org.pac4j.oidc.client.OidcClient;
 import org.pac4j.oidc.config.KeycloakOidcConfiguration;
 import org.pac4j.oidc.config.OidcConfiguration;
@@ -35,8 +39,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @EnableAutoConfiguration
 public class HelloWorldController {
 
-    String clientId = "hello";
-    String clientSecret = "830c9965-2990-4c22-8adc-6af4343b9040";
+    String clientId = "java";
+    // String clientSecret = "830c9965-2990-4c22-8adc-6af4343b9040";
+    String clientSecret = "e1f876fb-eb9d-43a5-9475-9984210c7aca";
 
     @Autowired
     ServletContext context;
@@ -65,7 +70,11 @@ public class HelloWorldController {
         show(req);
 
         String discoveryUri = "http://localhost:8080/auth/realms/master/.well-known/openid-configuration";
-        OidcConfiguration config = new OidcConfiguration();
+        // OidcConfiguration config = new OidcConfiguration();
+        KeycloakOidcConfiguration config = new KeycloakOidcConfiguration();
+
+        config.setRealm("master");
+        config.setBaseUri("http://localhost:8080/auth");
 
         config.setClientId(clientId);
         config.setSecret(clientSecret);
@@ -73,39 +82,16 @@ public class HelloWorldController {
         config.setResponseType("code");
         config.setUseNonce(true);
 
-        OidcClient client = new OidcClient(config);
+        // OidcClient client = new OidcClient(config);
+        KeycloakOidcClient client = new KeycloakOidcClient(config);
+
         J2EContext j2e = new J2EContext(req, res);
 
         client.setCallbackUrl("http://localhost:8083/token");
+        // client.setCallbackUrlResolver(new PathParameterCallbackUrlResolver());
+        client.setCallbackUrlResolver(new NoParameterCallbackUrlResolver());
         client.redirect(j2e);
     }
-
-    // @RequestMapping("/login2")
-    // @ResponseBody
-    // public void login2(HttpServletRequest req, HttpServletResponse res) throws
-    // UnsupportedEncodingException {
-
-    // String cb = "http://localhost:8083/token";
-    // // String url = URLEncoder.encode(cb, "UTF-8");
-    // // System.out.println("url = " + url);
-
-    // KeycloakOidcConfiguration config = new KeycloakOidcConfiguration();
-
-    // config.setClientId(clientId);
-    // config.setSecret(clientSecret);
-    // config.setBaseUri("http://localhost:8080/auth");
-    // config.setRealm("master");
-    // // config.setResponseType("code id_token token");
-    // config.setResponseType("code");
-    // config.setUseNonce(true);
-
-    // OidcClient client = new OidcClient(config);
-
-    // J2EContext j2e = new J2EContext(req, res);
-
-    // client.setCallbackUrl(cb);
-    // client.redirect(j2e);
-    // }
 
     @RequestMapping("/token")
     @ResponseBody
@@ -120,14 +106,14 @@ public class HelloWorldController {
 
         String tokenUrl = "http://localhost:8080/auth/realms/master/protocol/openid-connect/token";
 
-        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpClient httpClient = HttpClientBuilder.create().disableContentCompression().build();
         HttpPost httpPost = new HttpPost(tokenUrl);
 
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-        parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
-        parameters.add(new BasicNameValuePair("code", code));
         parameters.add(new BasicNameValuePair("client_id", clientId));
         parameters.add(new BasicNameValuePair("client_secret", clientSecret));
+        parameters.add(new BasicNameValuePair("code", code));
+        parameters.add(new BasicNameValuePair("grant_type", "authorization_code"));
         parameters.add(new BasicNameValuePair("redirect_uri", cb));
         // parameters.add(new BasicNameValuePair("state", state));
 

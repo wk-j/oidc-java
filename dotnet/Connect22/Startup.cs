@@ -29,21 +29,26 @@ namespace Connect22 {
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services) {
+
+            // http://localhost:5000/api/hello/hello
+            // "http://localhost:8080/auth/realms/master/protocol/openid-connect/auth";
+            // "http://localhost:8080/auth/realms/master/.well-known/openid-configuration/
+
             services.AddAuthentication(options => {
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
             })
                 .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options => {
-                    // http://localhost:5000/api/hello/hello
-                    // "http://localhost:8080/auth/realms/master/protocol/openid-connect/auth";
-                    // "http://localhost:8080/auth/realms/master/.well-known/openid-configuration/
                     options.Authority = "http://localhost:8080/auth/realms/master";
                     options.RequireHttpsMetadata = false;
                     options.ClientId = "hello";
-                    options.ClientSecret = "830c9965-2990-4c22-8adc-6af4343b9040";
-                    options.ResponseType = OpenIdConnectResponseType.CodeIdTokenToken;
-                    options.SignedOutCallbackPath = "/signin-oidc";
+                    // options.ClientSecret = "830c9965-2990-4c22-8adc-6af4343b9040";
+                    options.ClientSecret = "0f60c296-ff26-4eef-8890-b698c6a5d982";
+                    // options.ResponseType = OpenIdConnectResponseType.CodeIdTokenToken;
+                    options.ResponseType = OpenIdConnectResponseType.Code;
+                    // options.SignedOutCallbackPath = "/signin-oidc";
+                    options.CallbackPath = "/signin-oidc";
                     //options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
 
                     void Show(HttpRequest r) {

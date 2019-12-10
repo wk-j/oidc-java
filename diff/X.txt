@@ -1,0 +1,1 @@
+http://localhost:8080/auth/realms/master/protocol/openid-connect/auth?scope=openid+profile+email&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8083%2Ftoken%3Fclient_name%3DOidcClient&state=nShZY3_Pd4bdtgIgHcDcMArRidvHqWzkjRsH1NB2zg4&nonce=-tjZpxRPrBjYUlUK7V1bBbkoOf46krKaElE77bCgswg&client_id=java

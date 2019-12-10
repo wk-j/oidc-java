@@ -1,0 +1,21 @@
+Frame 496: 562 bytes on wire (4496 bits), 562 bytes captured (4496 bits) on interface 0
+Null/Loopback
+Internet Protocol Version 6, Src: ::1, Dst: ::1
+Transmission Control Protocol, Src Port: 59084, Dst Port: 8080, Seq: 1, Ack: 1, Len: 486
+Hypertext Transfer Protocol
+    POST /auth/realms/master/protocol/openid-connect/token HTTP/1.1\r\n
+    User-Agent: Microsoft ASP.NET Core OpenIdConnect handler\r\n
+    Content-Type: application/x-www-form-urlencoded\r\n
+    Content-Length: 269\r\n
+    Host: localhost:8080\r\n
+    \r\n
+    [Full request URI: http://localhost:8080/auth/realms/master/protocol/openid-connect/token]
+    [HTTP request 1/1]
+    [Response in frame: 508]
+    File Data: 269 bytes
+HTML Form URL Encoded: application/x-www-form-urlencoded
+    Form item: "client_id" = "hello"
+    Form item: "client_secret" = "0f60c296-ff26-4eef-8890-b698c6a5d982"
+    Form item: "code" = "be849ddc-1e33-4d97-a9c8-2bef91356023.65cb9f04-9b28-482f-b1aa-334f213c5655.c9ca5b21-0f0e-4831-95b2-d7ae0a33b767"
+    Form item: "grant_type" = "authorization_code"
+    Form item: "redirect_uri" = "http://localhost:5000/signin-oidc"

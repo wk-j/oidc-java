@@ -14,14 +14,13 @@ mvn clean install
 mvn spring-boot:run
 
 open http://localhost:8083/login
-open http://localhost:8083/login2
 ```
 
 ## .NET
 
 ```bash
 dotnet run --project  dotnet/Connect22/Connect22.csproj
-open http://localhost:5000/hello/hello
+open http://localhost:5000/api/hello/hello
 ```
 
 ## Resource
@@ -33,3 +32,10 @@ open http://localhost:5000/hello/hello
 - https://www.mathieupassenaud.fr/oauth-backend
 - https://medium.com/@bcarunmail/securing-rest-api-using-keycloak-and-spring-oauth2-6ddf3a1efcc2
 - https://www.ibm.com/developerworks/library/se-oauthjavapt3/index.html
+
+
+## Wireshark
+
+```bash
+tcp.port == 8080 && http
+```
